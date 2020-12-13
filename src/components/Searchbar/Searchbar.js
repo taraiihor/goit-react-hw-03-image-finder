@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import './Searchbar.css';
 class Searchbar extends Component {
   state = {
     searchImage: '',
@@ -10,6 +11,7 @@ class Searchbar extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
+
     if (this.state.searchImage.trim() === '') {
       alert('ведіть щось');
       return;
