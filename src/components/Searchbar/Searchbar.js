@@ -44,10 +44,4 @@ class Searchbar extends Component {
     );
   }
 }
-
 export default Searchbar;
-{
-  /* {this.state.loading && <div>Завантажуємо...</div>}
-
-        {this.state.hits && <div>{this.state.hits.tags}</div>} */
-}

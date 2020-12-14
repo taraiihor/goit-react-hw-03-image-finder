@@ -1,7 +1,7 @@
 import './Button.css';
-const Button = ({ fetchPage }) => (
+const Button = ({ updatePage }) => (
   <>
-    <button type="button" className="Button" onClick={fetchPage}>
+    <button type="button" className="Button">
       <span>Загрузити наступні зображення</span>
     </button>
   </>
