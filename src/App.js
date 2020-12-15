@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
 import Searchbar from './components/Searchbar/Searchbar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
 import Button from './components/Button/Button';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-import Loader from 'react-loader-spinner';
+import Modal from './components/Modal/Modal';
 
 class App extends React.Component {
   state = {
@@ -12,6 +13,7 @@ class App extends React.Component {
     images: '',
     currentPage: 1,
     loading: false,
+    showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -38,24 +40,23 @@ class App extends React.Component {
       })
       .finally(() => this.setState({ loading: false }));
   };
+  toggleModal = () => {
+    this.setState(state => ({
+      showModal: !state.showModal,
+    }));
+  };
   render() {
-    const { articles } = this.state;
+    const { articles, showModal, loading } = this.state;
     return (
       <>
+        <button type="button" onClick={this.toggleModal}>
+          Відкрити модалку
+        </button>
         <Searchbar onSubmit={this.handleFormSubmit} />
+        <ImageGallery articles={articles} />
+        {showModal && <Modal />}
 
-        <ul className="ImageGallery">
-          {articles.map(article => (
-            <li key={article.id}>
-              <img
-                src={article.webformatURL}
-                alt=""
-                className="ImageGalleryItem-image"
-              />
-            </li>
-          ))}
-        </ul>
-        {this.state.loading && (
+        {loading && (
           <Loader
             className="Button"
             type="ThreeDots"
@@ -65,36 +66,10 @@ class App extends React.Component {
             timeout={5000} //3 secs
           />
         )}
-        {this.state.articles.length > 11 && !this.state.loading && (
-          <button type="button" className="Button" onClick={this.fetchArticles}>
-            <span>Загрузити наступні зображення</span>
-          </button>
-        )}
+        {articles.length > 11 && <Button onClick={this.fetchArticles} />}
       </>
     );
   }
 }
 
 export default App;
-
-// class App extends React.Component {
-//   state = {
-//     images: [],
-//   };
-//   handleFormSubmit = images => {
-//     console.log(images);
-//     this.setState({ images });
-//   };
-
-//   render() {
-//     return (
-//       <>
-//         <Searchbar onSubmit={this.handleFormSubmit} />
-//         <ImageGallery images={this.state.images} />
-//         {/* <Button updatePage={this.updatePage} /> */}
-//       </>
-//     );
-//   }
-// }
-
-// export default App;
