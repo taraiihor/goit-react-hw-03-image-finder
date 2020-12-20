@@ -1,5 +1,6 @@
 import './ImageGallery.css';
 import ImageGalleryItem from '../ImageGalleryItem';
+import PropTypes from 'prop-types';
 
 function ImageGallery({ articles }) {
   return (
@@ -14,5 +15,8 @@ function ImageGallery({ articles }) {
     </ul>
   );
 }
-
+ImageGallery.propTypes = {
+  articles: PropTypes.arrayOf(PropTypes.object.isRequired),
+  id: PropTypes.number.isRequired,
+};
 export default ImageGallery;

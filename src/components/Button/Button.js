@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { animateScroll as scroll } from 'react-scroll';
 import './Button.css';
+import PropTypes from 'prop-types';
 class Button extends Component {
   scroll = () => {
     this.props.onClick();
@@ -15,5 +16,7 @@ class Button extends Component {
     );
   }
 }
-
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 export default Button;
