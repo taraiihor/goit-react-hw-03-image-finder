@@ -5,6 +5,7 @@ import Loader from 'react-loader-spinner';
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
 import Button from './components/Button';
+import ErrorView from './components/ErrorView';
 
 class App extends React.Component {
   state = {
@@ -12,6 +13,7 @@ class App extends React.Component {
     images: '',
     currentPage: 1,
     loading: false,
+    error: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -22,7 +24,7 @@ class App extends React.Component {
   }
 
   handleFormSubmit = query => {
-    this.setState({ images: query, currentPage: 1, articles: [] });
+    this.setState({ images: query, currentPage: 1, articles: [], error: null });
   };
 
   fetchArticles = () => {
@@ -30,20 +32,28 @@ class App extends React.Component {
     fetch(
       `https://pixabay.com/api/?q=${images}&page=${currentPage}&key=8052974-676f52671a56653f7826cdc16&image_type=photo&orientation=horizontal&per_page=12`,
     )
-      .then(respons => respons.json())
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return Promise.reject(new Error('нема зображення'));
+      })
       .then(articles => {
         this.setState(prevState => ({
           articles: [...prevState.articles, ...articles.hits],
           currentPage: prevState.currentPage + 1,
         }));
       })
+      .catch(error => this.setState({ error }))
       .finally(() => this.setState({ loading: false }));
   };
   render() {
-    const { articles, loading } = this.state;
+    const { articles, loading, error } = this.state;
     return (
-      <>
+      <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
+        {error && <ErrorView message={error.message} />}
         <ImageGallery articles={articles} />
 
         {loading && (
@@ -57,7 +67,7 @@ class App extends React.Component {
           />
         )}
         {articles.length > 11 && <Button onClick={this.fetchArticles} />}
-      </>
+      </div>
     );
   }
 }
