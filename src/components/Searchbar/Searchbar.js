@@ -11,12 +11,12 @@ class Searchbar extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
-
-    if (this.state.searchImage.trim() === '') {
-      alert('ведіть щось');
+    const { searchImage } = this.state;
+    if (searchImage.trim() === '') {
+      alert('Ведіть щось');
       return;
     }
-    this.props.onSubmit(this.state.searchImage);
+    this.props.onSubmit(searchImage);
     this.reset();
   };
 

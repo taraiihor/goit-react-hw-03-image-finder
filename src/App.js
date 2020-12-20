@@ -2,10 +2,9 @@ import React from 'react';
 import './App.css';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
-import Searchbar from './components/Searchbar/Searchbar';
-import ImageGallery from './components/ImageGallery/ImageGallery';
-import Button from './components/Button/Button';
-import Modal from './components/Modal/Modal';
+import Searchbar from './components/Searchbar';
+import ImageGallery from './components/ImageGallery';
+import Button from './components/Button';
 
 class App extends React.Component {
   state = {
@@ -13,7 +12,6 @@ class App extends React.Component {
     images: '',
     currentPage: 1,
     loading: false,
-    showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -23,13 +21,14 @@ class App extends React.Component {
     }
   }
 
-  handleFormSubmit = quety => {
-    this.setState({ images: quety, currentPage: 1, articles: [] });
+  handleFormSubmit = query => {
+    this.setState({ images: query, currentPage: 1, articles: [] });
   };
 
   fetchArticles = () => {
+    const { images, currentPage } = this.state;
     fetch(
-      `https://pixabay.com/api/?q=${this.state.images}&page=${this.state.currentPage}&key=8052974-676f52671a56653f7826cdc16&image_type=photo&orientation=horizontal&per_page=12`,
+      `https://pixabay.com/api/?q=${images}&page=${currentPage}&key=8052974-676f52671a56653f7826cdc16&image_type=photo&orientation=horizontal&per_page=12`,
     )
       .then(respons => respons.json())
       .then(articles => {
@@ -40,21 +39,12 @@ class App extends React.Component {
       })
       .finally(() => this.setState({ loading: false }));
   };
-  toggleModal = () => {
-    this.setState(state => ({
-      showModal: !state.showModal,
-    }));
-  };
   render() {
-    const { articles, showModal, loading } = this.state;
+    const { articles, loading } = this.state;
     return (
       <>
-        <button type="button" onClick={this.toggleModal}>
-          Відкрити модалку
-        </button>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery articles={articles} />
-        {showModal && <Modal />}
 
         {loading && (
           <Loader

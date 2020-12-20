@@ -1,12 +1,19 @@
+import React from 'react';
 import './ImageGallery.css';
 import ImageGalleryItem from '../ImageGalleryItem';
 
-const ImageGallery = ({ articles }) => (
-  <ul className="ImageGallery">
-    {articles.map(item => {
-      return <ImageGalleryItem item={item} key={item.id} />;
-    })}
-  </ul>
-);
+function ImageGallery({ articles }) {
+  return (
+    <ul className="ImageGallery">
+      {articles.map(({ id, largeImageURL, webformatURL }) => (
+        <ImageGalleryItem
+          key={id}
+          webformatURL={webformatURL}
+          largeImageURL={largeImageURL}
+        />
+      ))}
+    </ul>
+  );
+}
 
 export default ImageGallery;
